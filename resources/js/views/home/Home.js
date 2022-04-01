@@ -11,18 +11,51 @@ import {toast} from "react-toastify";
 
 const Home = () => {
 
-    const [state, setState] = useState(false)
-    const [{basket,quantity}] = useStateValue();
+    const [State, setState] = useState(false)
+    const [{basket, quantity}] = useStateValue();
 
     useEffect(() => {
-        setState(!state)
-    }, [basket,quantity]);
+        setState(!State)
+    }, [basket, quantity]);
+
+    const [{category, state, query}] = useStateValue();
+    const [loading, setLoading] = useState(false)
+    const [discount, setDiscount] = useState(0)
+    const [landingData, setLandingData] = useState([])
+    let key = 'all'
+
+    if (query) {
+        key = query
+    }
+    if (!/\S/.test(query)) {
+        key = 'all'
+    }
+
+    useEffect(() => {
+        const delayQuery = setTimeout(async () => {
+            setLoading(true)
+            if (key.match(/^ *$/) === null) {
+                await Api().get(`/products/${category.title}/${key}`)
+                    .then((response) => {
+                        setLandingData(response.data.products)
+                        setDiscount(response.data.discount)
+                        setLoading(false)
+                    })
+                    .catch((error) => {
+                        toast.error('OOPS! something went wrong')
+                    })
+            }
+        }, (query !== 'all' && category.title === 0) ? 400 : 0)
+
+        return () => clearTimeout(delayQuery)
+
+    }, [query, category.title, state])
 
 
     return (
         <div className='home-Container'>
             <div className='home'>
-                <LandingData admin={false}/>
+                <LandingData data={landingData} loading={loading} admin={false}/>
             </div>
             <FullCart isThisForConfirmPayment={false}/>
             <ModalContent/>

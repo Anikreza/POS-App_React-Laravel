@@ -6,44 +6,15 @@ import {useStateValue} from "../../../states/StateProvider";
 import Button from "../../../components/button/Button";
 import {BeatLoader} from "react-spinners";
 
-const Inventory = () => {
+const Inventory = (props) => {
 
-    const [data, setData] = useState([])
     const [ready, setReady] = useState(false)
     const [info, setInfo] = useState('')
     const [loading, setLoading] = useState(false)
-    const [loading2, setLoading2] = useState(false)
     const user = JSON.parse(localStorage.getItem('user'));
     let admin = user?.admin;
     const [{state}, dispatch] = useStateValue();
 
-    const getData = useCallback(
-        async () => {
-            setLoading2(true)
-            await Api().get('/productsWithInventory')
-                .then(res => {
-                    console.log('inv', res.data)
-                    setData(res.data)
-                    setLoading2(false)
-                    res.data.map(data => {
-                        data.inventories.map(inv => {
-                            if (inv.stock < inv.threshold) {
-                                dispatch(
-                                    {
-                                        type: "setShowNotification",
-                                        item: true
-                                    })
-                            }
-                        })
-                    })
-                })
-        },
-        [],
-    );
-
-    useEffect(async () => {
-        getData().then(r => r)
-    }, [getData]);
 
     async function sendMail() {
         setLoading(true)
@@ -63,6 +34,8 @@ const Inventory = () => {
             setReady(false)
         }
     }, [info]);
+
+
 
     const getNotification = useCallback(
         async () => {
@@ -116,12 +89,12 @@ const Inventory = () => {
             </div>
             <div className='inventory'>
                 {
-                    (loading2) ?
+                    (props.loading2) ?
                         <div className='inventory'>
                             <BeatLoader size={15} color={'#a2a2a2'}/>
                         </div>
                         :
-                        data.map((item) => (
+                        props.data.map((item) => (
                             <div className='inventoryCard' key={item.id}>
                                 <br/>
                                 <p>Ingredients for <span className='title'>{item.title}</span></p>

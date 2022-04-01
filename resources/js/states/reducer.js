@@ -2,6 +2,7 @@ export const initialState = {
     basket: [],
     user: {},
     state: 0,
+    settingsAdminRoute:'/settings',
     showNotification:false,
     quantity: 1,
     deliveryMethod: '',
@@ -87,6 +88,11 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 state: action.item
+            }
+            case "setSettingsAdminRoute":
+            return {
+                ...state,
+                settingsAdminRoute: action.item
             }
             case "setShowNotification":
             return {

@@ -8,7 +8,7 @@ const OrderReport = (props) => {
     useEffect(() => {
         let Sum = []
         props.products.map((menu) => {
-            Sum.push(menu.products.price * menu.quantity)
+            Sum.push(menu.products?.price * menu.quantity)
         })
         setTotal(sum(Sum))
     }, []);
@@ -24,8 +24,8 @@ const OrderReport = (props) => {
                         <hr/>
                         {
                             props.products.map((product) => (
-                                <div key={product.products.id}>
-                                    <p className='productTitle'>{product.products.title} ({product.quantity})</p>
+                                <div key={product.products?.id}>
+                                    <p className='productTitle'>{product.products?.title} ({product.quantity})</p>
                                 </div>
                             ))
                         }

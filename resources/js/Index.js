@@ -64,12 +64,7 @@ function App() {
                     <Route path='*' exact={true} element={<NotFound/>}/>
 
                     {/*Protected Routes*/}
-                    <Route path="/settings"
-                           element={admin ? <Settings element={<LandingData admin={true}/>}/> : <Navigate to="/"/>}
-                    />
-                    <Route path="/settings/inventory"
-                           element={admin ? <Settings element={<Inventory/>}/> : <Navigate to="/"/>}
-                    />
+                    <Route path="/settings" element={admin ? <Settings/> : <Navigate to="/"/>}/>
                     <Route path="/dashboard" element={admin ? <Dashboard/> : <Navigate to="/"/>}/>
                     <Route exact path="/" element={!admin ? <Home/> : <Navigate to="/dashboard"/>}/>
                     <Route exact path="/orders" element={!admin ? <Orders/> : <Navigate to="/dashboard"/>}/>
